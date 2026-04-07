@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cursive OCR App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <header>
+      <h1>Cursive OCR</h1>
+      <p>Upload a handwriting sample to extract and correct text</p>
+    </header>
+
+    <main>
+
+      <!-- STEP 1: Upload -->
+      <section id="upload-section">
+        <h2>1. Upload Handwriting Sample</h2>
+        <input type="file" id="image-upload" accept="image/*" />
+        <div id="image-preview-container">
+          <img id="image-preview" src="" alt="Preview will appear here" />
+        </div>
+      </section>
+
+      <!-- STEP 2: OCR Result -->
+      <section id="ocr-section">
+        <h2>2. OCR Result</h2>
+        <button id="run-ocr-btn">Run OCR</button>
+        <div id="ocr-output">OCR result will appear here...</div>
+      </section>
+
+      <!-- STEP 3: Correction -->
+      <section id="correction-section">
+        <h2>3. Correct the Result</h2>
+        <textarea id="correction-input" placeholder="Type the correct text here..."></textarea>
+        <button id="save-correction-btn">Save Correction</button>
+      </section>
+
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
