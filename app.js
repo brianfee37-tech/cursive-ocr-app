@@ -42,18 +42,47 @@ runOcrBtn.addEventListener('click', async () => {
 });
 
 // === STEP 3: SAVE CORRECTION ===
-saveCorrectionBtn.addEventListener('click', () => {
-  const correctedText = correctionInput.value.trim();
-  if (!correctedText) {
-    alert('Please enter a correction first.');
-    return;
-  }
-
-  console.log('Correction saved:', {
-    ocr_raw: ocrOutput.textContent,
-    ocr_corrected: correctedText,
-    timestamp: new Date().toISOString()
+saveCorrectionBtn.addEventListener('click', async () => {
+    const correctedText = correctionInput.value.trim();
+    if (!correctedText) {
+      alert('Please enter a correction first.');
+      return;
+    }
+  
+    saveCorrectionBtn.disabled = true;
+    saveCorrectionBtn.textContent = 'Saving...';
+  
+    try {
+      // Save to samples table
+      const { data, error } = await supabaseClient
+        .from('samples')
+        .insert([{
+          image_url: null,
+          ocr_raw: ocrOutput.textContent,
+          ocr_corrected: correctedText,
+          is_corrected: true
+        }])
+        .select();
+  
+      if (error) throw error;
+  
+      // Save to correction_log table
+      await supabaseClient
+        .from('correction_log')
+        .insert([{
+          sample_id: data[0].id,
+          original: ocrOutput.textContent,
+          corrected: correctedText
+        }]);
+  
+      alert('Correction saved to database!');
+      correctionInput.value = '';
+  
+    } catch (err) {
+      console.error('Save failed:', err);
+      alert('Save failed. Check the console for details.');
+    }
+  
+    saveCorrectionBtn.disabled = false;
+    saveCorrectionBtn.textContent = 'Save Correction';
   });
-
-  alert('Correction saved! (Will connect to database soon)');
-});
